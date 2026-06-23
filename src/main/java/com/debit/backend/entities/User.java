@@ -41,7 +41,7 @@ public class User  extends BaseEntity implements UserDetails {
 
 
     @Email
-    @Column(name = "email", nullable = false)
+    @Column(name = "email" )
     private String email;
 
     @Column(name = "password", nullable = false)
