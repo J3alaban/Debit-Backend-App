@@ -45,33 +45,43 @@ public class UserServiceImpl implements UserService {
     private final EmailVerificationTokenRepository emailVerificationTokenRepository;
 
     @Override
-    public UserResponseDTO registerUser(UserRequestDTO userRequestDTO) {
+    public UserResponseDTO registerUser(UserRequestDTO dto) {
 
-        if (userRepository.findByEmail(userRequestDTO.getEmail()).isPresent()) {
+        if (dto.getEmail() != null &&
+                userRepository.findByEmail(dto.getEmail()).isPresent()) {
             throw new IllegalStateException("Email already taken");
         }
 
         User user = new User();
-        user.setFirstName(userRequestDTO.getFirstName());
-        user.setLastName(userRequestDTO.getLastName());
-        user.setEmail(userRequestDTO.getEmail());
-        user.setPassword(passwordEncoder.encode(userRequestDTO.getPassword()));
-        user.setPhone(userRequestDTO.getPhone());
+        user.setFirstName(dto.getFirstName());
+        user.setLastName(dto.getLastName());
+        user.setEmail(dto.getEmail());
+
+        if (dto.getPassword() != null && !dto.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        } else {
+            user.setPassword(null);
+        }
+
+        user.setPhone(dto.getPhone());
         user.setRole(Role.CUSTOMER);
-        user.setTcNo(userRequestDTO.getTcNo());
+        user.setTcNo(dto.getTcNo());
         user.setEmailVerified(false);
 
         User savedUser = userRepository.save(user);
 
-        EmailVerificationToken token = new EmailVerificationToken();
-        token.setUser(savedUser);
-        token.setToken(UUID.randomUUID().toString());
-        token.setExpiresAt(LocalDateTime.now().plusMinutes(30));
-        token.setUsed(false);
+        // email yoksa verification token da üretme
+        if (savedUser.getEmail() != null) {
+            EmailVerificationToken token = new EmailVerificationToken();
+            token.setUser(savedUser);
+            token.setToken(UUID.randomUUID().toString());
+            token.setExpiresAt(LocalDateTime.now().plusMinutes(30));
+            token.setUsed(false);
 
-        emailVerificationTokenRepository.save(token);
+            emailVerificationTokenRepository.save(token);
 
-        mailService.sendVerificationMail(savedUser.getEmail(), token.getToken());
+            mailService.sendVerificationMail(savedUser.getEmail(), token.getToken());
+        }
 
         return userMapper.responseFromUser(savedUser);
     }
