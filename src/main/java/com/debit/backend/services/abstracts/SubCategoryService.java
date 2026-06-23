@@ -13,6 +13,8 @@ public interface SubCategoryService {
 
     SubCategoryResponse getById(Long id);
 
+    List<SubCategoryResponse> getByCategoryId(Long categoryId);
+
     SubCategoryResponse update(Long id, CreateSubCategoryRequest request);
 
     void delete(Long id);

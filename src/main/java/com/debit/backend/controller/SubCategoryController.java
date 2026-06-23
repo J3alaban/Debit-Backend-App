@@ -28,11 +28,11 @@ public class SubCategoryController {
         return subCategoryService.getAll();
     }
 
-    @GetMapping("/{id}")
-    public SubCategoryResponse getById(
-            @PathVariable Long id) {
+    @GetMapping("/{categoryId}")  // bu endpoiny id si "n" olan subkategorileri listeler
+    public List<SubCategoryResponse> getByCategoryId(
+            @PathVariable Long categoryId) {
 
-        return subCategoryService.getById(id);
+        return subCategoryService.getByCategoryId(categoryId);
     }
 
     @PutMapping("/{id}")

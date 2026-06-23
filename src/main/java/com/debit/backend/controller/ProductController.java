@@ -33,15 +33,16 @@ public class ProductController {
 
     // CREATE
     @PostMapping("/{userId}")
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<ProductResponseDTO> createProduct(
             @PathVariable Long userId,
             @Valid @RequestBody ProductRequestDTO productRequestDTO) {
 
-        return ResponseEntity.ok(
-                productService.createProduct(userId, productRequestDTO)
-        );
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(productService.createProduct(userId, productRequestDTO));
     }
+
+
     // UPDATE
     @PutMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> updateProduct(
@@ -71,7 +72,6 @@ public class ProductController {
         );
     }
 
-    // 🔥 NEW: SUBCATEGORY FILTER (correct architecture)
     @GetMapping("/sub-category/{subCategoryId}")
     public ResponseEntity<Page<ProductResponseDTO>> getBySubCategory(
             @PathVariable Long subCategoryId,

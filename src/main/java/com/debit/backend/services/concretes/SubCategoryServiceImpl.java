@@ -56,6 +56,15 @@ public class SubCategoryServiceImpl implements SubCategoryService {
     }
 
     @Override
+    public List<SubCategoryResponse> getByCategoryId(Long categoryId) {
+
+        return subCategoryRepository.findByCategoryId(categoryId)
+                .stream()
+                .map(subCategoryMapper::toResponse)
+                .toList();
+    }
+
+    @Override
     public SubCategoryResponse update(Long id, CreateSubCategoryRequest request) {
 
         SubCategories existing = subCategoryRepository.findById(id)
