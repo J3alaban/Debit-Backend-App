@@ -28,5 +28,7 @@ public class Category {
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )
+
+
     private List<SubCategories> subCategories = new ArrayList<>();
 }

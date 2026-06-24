@@ -13,6 +13,7 @@ import java.util.List;
 public interface UserService extends UserDetailsService {
 
     UserResponseDTO registerUser(UserRequestDTO userRequestDTO);
+    List<UserResponseDTO> registerUsers(List<UserRequestDTO> userRequestDTOList);
 
     UserResponseDTO loginUser(LoginRequestDTO loginRequestDTO);
 

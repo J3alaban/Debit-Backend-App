@@ -62,6 +62,16 @@ public class UserController {
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
+    @PostMapping("/register/bulk")
+    public ResponseEntity<List<UserResponseDTO>> registerBulk(
+            @RequestBody List<UserRequestDTO> list) {
+
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userService.registerUsers(list));
+    }
+
+
     @GetMapping("/{userId}/profile")
     public ResponseEntity<UserResponseDTO> getUserProfile(
             @PathVariable Long userId) {

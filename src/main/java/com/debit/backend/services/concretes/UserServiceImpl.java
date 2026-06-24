@@ -35,7 +35,7 @@ import java.util.UUID;
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
-    private final ProductRepository productRepository; // 🔥 EKLENDİ
+    private final ProductRepository productRepository;
     private final UserMapper userMapper;
     private final ProductMapper productMapper;
 
@@ -85,6 +85,20 @@ public class UserServiceImpl implements UserService {
 
         return userMapper.responseFromUser(savedUser);
     }
+
+
+    @Override
+    public List<UserResponseDTO> registerUsers(List<UserRequestDTO> list) {
+        return list.stream()
+                .map(this::registerUser)
+                .toList();
+    }
+
+
+
+
+
+
 
     @Override
     public Page<ProductResponseDTO> getUserProducts(Long userId, Pageable pageable) {
