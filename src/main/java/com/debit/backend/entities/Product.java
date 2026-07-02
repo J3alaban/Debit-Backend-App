@@ -26,25 +26,25 @@ public class Product extends BaseEntity {
     @Column(length = 2000)
     private String description;
 
-
     private Double price;
 
     @Column(nullable = false)
     private int stock;
 
-    // 🔥 ZORUNLU CATEGORY
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    // 🔥 OPSİYONEL SUBCATEGORY
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sub_category_id", nullable = true)
+    @JoinColumn(name = "sub_category_id")
     private SubCategories subCategory;
 
     private String brand;
 
     private String sku;
+
+    @Column(nullable = false, unique = true, updatable = false, length = 13)
+    private String barcode;
 
     private Double rating;
 

@@ -29,6 +29,10 @@ public class ProductResponseDTO {
 
     private String brand;
     private String sku;
+
+
+    private String barcode;
+
     private Integer weight;
 
     private String availabilityStatus;

@@ -26,7 +26,39 @@ public class ProductServiceImpl implements ProductService {
     private final SubCategoryRepository subCategoryRepository;
     private final CategoryRepository categoryRepository;
     private final ProductMapper productMapper;
-    private final UserRepository userRepository; // 🔥 EKLENDİ
+    private final UserRepository userRepository;
+
+
+    private String generateEan13() {
+
+        long number = System.nanoTime(); // daha stabil
+
+        String base12 = String.valueOf(Math.abs(number))
+                .substring(0, 12);
+
+        int sum = 0;
+
+        for (int i = 0; i < 12; i++) {
+            int digit = base12.charAt(i) - '0';
+
+            sum += (i % 2 == 0) ? digit : digit * 3;
+        }
+
+        int checkDigit = (10 - (sum % 10)) % 10;
+
+        return base12 + checkDigit;
+    }
+
+
+    @Override
+    public ProductResponseDTO getProductByBarcode(String barcode) {
+
+        Product product = productRepository.findByBarcode(barcode)
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+
+        return productMapper.responseFromProduct(product);
+    }
+
 
     @Override
     public Page<ProductResponseDTO> getAllProducts(Pageable pageable) {
@@ -64,14 +96,27 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = productMapper.productFromRequest(dto);
 
+        // ilişkilendirmeler
         product.setCategory(category);
         product.setSubCategory(subCategory);
         product.setUser(user);
+
+        // EAN-13 barcode üretimi
+        String barcode;
+        do {
+            barcode = generateEan13();
+        } while (productRepository.existsByBarcode(barcode));
+
+        product.setBarcode(barcode);
 
         return productMapper.responseFromProduct(
                 productRepository.save(product)
         );
     }
+
+
+
+
 
     @Override
     public ProductResponseDTO updateProduct(Long id, ProductRequestDTO dto) {

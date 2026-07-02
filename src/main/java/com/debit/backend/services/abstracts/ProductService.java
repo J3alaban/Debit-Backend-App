@@ -23,4 +23,6 @@ public interface ProductService {
     Page<ProductResponseDTO> getProductsByCategory(Long categoryId, Pageable pageable);
 
     Page<ProductResponseDTO> getProductsBySubCategory(Long subCategoryId, Pageable pageable);
+    ProductResponseDTO getProductByBarcode(String barcode);
+
 }

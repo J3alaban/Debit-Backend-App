@@ -23,6 +23,7 @@ public interface ProductMapper {
     @Mapping(target = "user", ignore = true) // 🔥 eksikti
     @Mapping(target = "dimensions", expression = "java(mapDimensions(request.getDimensions()))")
     @Mapping(target = "images", expression = "java(mapImages(request.getImages()))")
+    @Mapping(target = "barcode", ignore = true)
     Product productFromRequest(ProductRequestDTO request);
 
     // RESPONSE

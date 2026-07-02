@@ -25,6 +25,12 @@ public class ProductController {
     }
 
 
+    @GetMapping("/barcode/{barcode}")
+    public ProductResponseDTO getByBarcode(@PathVariable String barcode) {
+        return productService.getProductByBarcode(barcode);
+    }
+
+
     // GET BY ID
     @GetMapping("/{id}")
     public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long id) {
